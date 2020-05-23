@@ -38,4 +38,5 @@ Index.getInitialProps = async (ctx) => {
   return { emoji: data };
 };
 
+
 export default Index;
