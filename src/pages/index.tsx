@@ -1,6 +1,6 @@
 import React from "react";
 
-import { convertEmojiToHex } from "../../shared/logic";
+import { convertEmojiToHex } from "../shared/logic";
 
 export default function Home() {
   return (
