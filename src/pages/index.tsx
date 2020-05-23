@@ -5,7 +5,7 @@ import { EmojiTimer } from "../shared/components/EmojiTimer";
 import { EmojiTimerWeb } from "../web/components/EmojiTimerWeb";
 
 import { convertEmojiToHex } from "../shared/logic";
-import { absoluteUrl } from "../next.js/index.js";
+import { absoluteUrl } from "../next";
 
 import { Emoji } from "../types";
 
