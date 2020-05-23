@@ -26,7 +26,9 @@ export const EmojiTimerWeb = ({ timerValue, emoji }: EmojiTimerWebProps) => {
         </svg>
       </div>
       <div className="timer__inner">
-        <span role="img">{emoji}</span>
+        <span role="img" aria-label={emoji.slug}>
+          {emoji.character}
+        </span>
       </div>
       <style jsx>{`
         .timer {
