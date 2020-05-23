@@ -1,13 +1,13 @@
 import React, { useCallback } from "react";
 import axios from "axios";
 
-import { EmojiTimer } from "../../shared/components/EmojiTimer";
-import { EmojiTimerWeb } from "../../web/components/EmojiTimerWeb";
+import { EmojiTimer } from "../shared/components/EmojiTimer";
+import { EmojiTimerWeb } from "../web/components/EmojiTimerWeb";
 
-import { convertEmojiToHex } from "../../shared/logic";
-import { absoluteUrl } from "../../next.js";
+import { convertEmojiToHex } from "../shared/logic";
+import { absoluteUrl } from "../next.js/index.js";
 
-import { Emoji } from "../../types";
+import { Emoji } from "../types";
 
 export type IndexProps = {
     emoji: Emoji;
