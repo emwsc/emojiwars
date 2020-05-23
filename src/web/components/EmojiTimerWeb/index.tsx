@@ -15,7 +15,7 @@ export const EmojiTimerWeb = ({ timerValue, emoji }: EmojiTimerWebProps) => {
           <circle
             className="progress-ring__circle"
             stroke="#4E6ACD"
-            stroke-width="10"
+            strokeWidth="10"
             fill="transparent"
             r="105"
             strokeDashoffset={offset}

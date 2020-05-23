@@ -14,4 +14,7 @@ module.exports = {
     // });
     return config;
   },
+  serverRuntimeConfig: {
+    PROJECT_ROOT: __dirname,
+  },
 };
