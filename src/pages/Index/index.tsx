@@ -7,7 +7,11 @@ import { EmojiTimerWeb } from "../../web/components/EmojiTimerWeb";
 import { convertEmojiToHex } from "../../shared/logic";
 import { absoluteUrl } from "../../next.js";
 
-import { IndexProps } from "./types";
+import { Emoji } from "../../types";
+
+export type IndexProps = {
+    emoji: Emoji;
+}
 
 const Index = ({ emoji }: IndexProps) => {
   const emojiTimerRender = useCallback(
