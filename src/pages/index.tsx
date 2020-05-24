@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import axios from "axios";
 
 import Head from "next/head";
@@ -7,7 +7,7 @@ import { EmojiTimerWeb } from "../web/components/EmojiTimerWeb";
 import { Keyboard } from "../shared/components/Keyboard";
 import { KeyboardWeb } from "../web/components/KeyboardWeb";
 
-import { convertEmojiToHex, getRandomInt } from "../shared/logic";
+import { getRandomInt, compareEmoji } from "../shared/logic";
 import { absoluteUrl } from "../next";
 
 import { Emoji } from "../types";
@@ -17,12 +17,34 @@ export type IndexProps = {
 };
 
 const Index = ({ emojis }: IndexProps) => {
-  const emoji = emojis[getRandomInt(0, emojis.length)];
+  /**
+   * @todo Move emoji, maxTimerValue to app store
+   */
+  const [emoji, setEmoji] = useState(emojis[getRandomInt(0, emojis.length)]);
+  const [maxTimerValue, setMaxTimervalue] = useState(10000);
+  const [score, setScore] = useState(0);
+
   const emojiTimerRender = useCallback(
-    (value) => <EmojiTimerWeb timerValue={value} emoji={emoji} />,
-    []
+    (props) => <EmojiTimerWeb {...props} emoji={emoji} />,
+    [emoji]
   );
   const keyboardRender = useCallback((props) => <KeyboardWeb {...props} />, []);
+
+  const handleOnTimerEnd = useCallback(() => {
+    setEmoji(emojis[getRandomInt(0, emojis.length)]);
+  }, []);
+
+  /**
+   * @todo Move logic to shared
+   */
+  const handleOnKeyboardClick = useCallback((selectedEmoji: Emoji) => {
+    if (compareEmoji(selectedEmoji, emoji)) {
+      setScore((value) => value + 1);
+      setMaxTimervalue(value => value - 250);
+    }
+    handleOnTimerEnd();
+  }, [emoji]);
+
   return (
     <>
       <Head>
@@ -34,12 +56,21 @@ const Index = ({ emojis }: IndexProps) => {
       </Head>
       <main className="page">
         <section>
-          {emoji.character} = {convertEmojiToHex(emoji.character)}
-          <EmojiTimer timerValue={10000} render={emojiTimerRender} />
+          <h2>{score}</h2>
+          <EmojiTimer
+            key={emoji.character}
+            maxTimerValue={maxTimerValue}
+            render={emojiTimerRender}
+            onTimerEnd={handleOnTimerEnd}
+          />
         </section>
         <section>
           <div className="keyboard-container">
-            <Keyboard emojis={emojis} render={keyboardRender} />
+            <Keyboard
+              emojis={emojis}
+              render={keyboardRender}
+              onClick={handleOnKeyboardClick}
+            />
           </div>
         </section>
         <style jsx>{`

@@ -2,10 +2,10 @@ import React from "react";
 
 import { EmojiTimerWebProps } from "./types";
 
-export const EmojiTimerWeb = ({ timerValue, emoji }: EmojiTimerWebProps) => {
+export const EmojiTimerWeb = ({ timerValue, maxTimerValue, emoji }: EmojiTimerWebProps) => {
   const radius = 105;
   const circumference = radius * 2 * Math.PI;
-  const percent = (timerValue * 100) / 10000;
+  const percent = (timerValue * 100) / maxTimerValue;
   const offset = (circumference - (percent / 100) * circumference) * -1;
 
   return (

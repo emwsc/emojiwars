@@ -1,13 +1,17 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 
 import { KEY_HEIGHT, KEY_MARGIN, KEY_WIDTH } from "./constants";
 
 import { KeyboardWebProps, KeyProps } from "./types";
 import { Emoji } from "../../../types";
 
-const Key = ({ character, slug }: KeyProps) => {
+const Key = ({ emoji, onClick }: KeyProps) => {
+  const { character, slug } = emoji;
+
+  const handleOnClick = useCallback(() => onClick(emoji), [emoji, onClick]);
+
   return (
-    <button className="key" tabIndex={1}>
+    <button className="key" tabIndex={1} onClick={handleOnClick}>
       <span role="img" aria-label={slug}>
         {character}
       </span>
@@ -83,7 +87,7 @@ export const KeyboardWeb = ({ emojis, onClick }: KeyboardWebProps) => {
           return (
             <div key={index} className="block">
               {block.map((emoji) => (
-                <Key key={emoji.character} {...emoji} />
+                <Key key={emoji.character} emoji={emoji} onClick={onClick} />
               ))}
             </div>
           );
