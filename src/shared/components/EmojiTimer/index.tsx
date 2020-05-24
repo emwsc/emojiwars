@@ -8,7 +8,7 @@ export const EmojiTimer = ({ render, maxTimerValue, onTimerEnd }: EmojiTimerProp
   useEffect(() => {
     const interval = setInterval(() => {
       if (timerValue <= 0) {
-        onTimerEnd();
+        onTimerEnd(true);
         settimerValue(maxTimerValue);
         return;
       }

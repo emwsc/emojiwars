@@ -33,8 +33,11 @@ const Index = ({ emojis }: IndexProps) => {
   );
   const keyboardRender = useCallback((props) => <KeyboardWeb {...props} />, []);
 
-  const handleOnTimerEnd = useCallback(() => {
+  const handleOnTimerEnd = useCallback((isError: boolean) => {
     setEmoji(emojis[getRandomInt(0, emojis.length)]);
+    if (isError) {
+      updateErrorCounter((value) => value + 1);
+    }
   }, []);
 
   /**
@@ -45,11 +48,10 @@ const Index = ({ emojis }: IndexProps) => {
       if (compareEmoji(selectedEmoji, emoji)) {
         setScore((value) => value + 1);
         setMaxTimervalue((value) => value - 250);
+        handleOnTimerEnd(false);
+      } else {
+        handleOnTimerEnd(true);
       }
-      else{
-        updateErrorCounter((value) => value + 1);
-      }
-      handleOnTimerEnd();
     },
     [emoji]
   );
