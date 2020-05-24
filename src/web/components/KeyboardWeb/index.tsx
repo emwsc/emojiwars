@@ -13,18 +13,19 @@ const Key = ({ character, slug }: KeyProps) => {
       </span>
       <style jsx>{`
         .key {
+          flex-shrink: 0;
           background: #fff;
           border-radius: 5px;
           display: flex;
           align-items: center;
           justify-content: center;
-          height: ${KEY_HEIGHT}px;
-          width: ${KEY_WIDTH}px;
-          margin: ${KEY_MARGIN}px;
+          height: 100%;
+          width: 100%;
           border: 1px solid transparent;
           outline: none;
           box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.3);
           font-size: 24px;
+          padding: 0;
         }
 
         .key::-moz-focus-inner {
@@ -44,20 +45,8 @@ const Key = ({ character, slug }: KeyProps) => {
   );
 };
 
-const breakIntoBlocks = (
-  emojis: Emoji[],
-  keyboardRef: React.MutableRefObject<HTMLDivElement | null>
-) => {
-  if (keyboardRef.current === null) {
-    return [];
-  }
-  const { clientWidth, clientHeight } = keyboardRef.current;
-  const keysInRow = Math.floor(clientWidth / (KEY_WIDTH + KEY_MARGIN * 2));
-  let keysInColumn = Math.floor(clientHeight / (KEY_HEIGHT + KEY_MARGIN * 2));
-  if (keysInColumn === 0) {
-    keysInColumn = 1;
-  }
-  const maxKeys = keysInColumn * keysInRow;
+const breakIntoBlocks = (emojis: Emoji[], columns: number, rows: number) => {
+  const maxKeys = rows * columns;
   const blocks = [[]];
   emojis.forEach((emoji) => {
     let lastBlock = blocks[blocks.length - 1];
@@ -73,12 +62,22 @@ const breakIntoBlocks = (
 export const KeyboardWeb = ({ emojis, onClick }: KeyboardWebProps) => {
   const keyboardRef = useRef<HTMLDivElement | null>(null);
   const [blocks, setBlocks] = useState([]);
+  const [columns, setColumns] = useState(0);
+  const [rows, setRows] = useState(0);
   useEffect(() => {
-    setBlocks(breakIntoBlocks(emojis, keyboardRef));
+    const { clientWidth, clientHeight } = keyboardRef.current;
+    const columns = Math.floor(clientWidth / (KEY_WIDTH + KEY_MARGIN));
+    let rows = Math.floor(clientHeight / (KEY_HEIGHT + KEY_MARGIN));
+    if (rows === 0) {
+      rows = 1;
+    }
+    setRows(rows);
+    setColumns(columns);
+    setBlocks(breakIntoBlocks(emojis, columns, rows));
   }, []);
   return (
-    <div ref={keyboardRef} className="keyboard">
-      <div className="keyboard__keys-container">
+    <div className="keyboard">
+      <div className="keyboard__keys-container" ref={keyboardRef}>
         {blocks.map((block, index) => {
           return (
             <div key={index} className="block">
@@ -93,10 +92,9 @@ export const KeyboardWeb = ({ emojis, onClick }: KeyboardWebProps) => {
       <style jsx>{`
         .keyboard {
           background: #ced2d9;
-          max-width: 100%;
+          width: 100%;
           height: 100%;
           margin: 0 auto;
-          padding: 10px;
           border-radius: 5px;
           box-sizing: border-box;
         }
@@ -107,18 +105,20 @@ export const KeyboardWeb = ({ emojis, onClick }: KeyboardWebProps) => {
           display: flex;
           overflow-x: auto;
           overflow-y: hidden;
-          margin-bottom: 15px;
           scroll-snap-type: x mandatory;
         }
 
         .block {
-          scroll-snap-align: start;
-          flex-shrink: 0;
+          scroll-snap-align: center;
           width: 100%;
           height: 100%;
-          display: flex;
-          flex-wrap: wrap;
-          align-content: start;
+          display: grid;
+          grid-template-rows: repeat(${rows}, ${KEY_HEIGHT}px);
+          grid-template-columns: repeat(${columns}, ${KEY_WIDTH}px);
+          grid-gap: ${KEY_MARGIN}px;
+          align-content: center;
+          justify-content: center;
+          flex-shrink: 0;
         }
 
         @media (max-width: 1000px) {
