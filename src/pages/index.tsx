@@ -48,7 +48,7 @@ const Index = ({ emojis }: IndexProps) => {
         }
 
         .keyboard-container {
-          height: 300px;
+          height: 380px;
           width: 100%;
         }
       `}</style>
