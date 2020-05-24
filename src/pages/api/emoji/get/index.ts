@@ -1,19 +1,16 @@
 import EMOJIS from "./emojis.json";
 
-const getRandomInt = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
-};
+import { getRandomInt } from "../../../../shared/logic";
 
-const sendRandomEmoji = (res) => {
-  const emoji = EMOJIS[getRandomInt(0, EMOJIS.length)];
-  res.status(200).json(emoji);
+const sendRandomEmojis = (res) => {
+  const { group } = EMOJIS[getRandomInt(0, EMOJIS.length)];
+  const emojis = EMOJIS.filter((emoji) => emoji.group === group);
+  res.status(200).json(emojis);
 };
 
 export default async (req, res) => {
   return new Promise(async (resolve) => {
-    sendRandomEmoji(res);
+    sendRandomEmojis(res);
     return resolve();
   });
 };

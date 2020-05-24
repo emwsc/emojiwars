@@ -43,6 +43,7 @@ export const EmojiTimerWeb = ({ timerValue, emoji }: EmojiTimerWebProps) => {
           position: relative;
           z-index: 1;
           font-size: 50px;
+          margin: 0 auto;
         }
 
         .timer__inner {
