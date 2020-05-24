@@ -53,7 +53,10 @@ const breakIntoBlocks = (
   }
   const { clientWidth, clientHeight } = keyboardRef.current;
   const keysInRow = Math.floor(clientWidth / (KEY_WIDTH + KEY_MARGIN * 2));
-  const keysInColumn = Math.floor(clientHeight / (KEY_HEIGHT + KEY_MARGIN * 2));
+  let keysInColumn = Math.floor(clientHeight / (KEY_HEIGHT + KEY_MARGIN * 2));
+  if (keysInColumn === 0) {
+    keysInColumn = 1;
+  }
   const maxKeys = keysInColumn * keysInRow;
   const blocks = [[]];
   emojis.forEach((emoji) => {
@@ -115,8 +118,13 @@ export const KeyboardWeb = ({ emojis, onClick }: KeyboardWebProps) => {
           height: 100%;
           display: flex;
           flex-wrap: wrap;
-          justify-content: start;
           align-content: start;
+        }
+
+        @media (max-width: 1000px) {
+          .keyboard {
+            border-radius: 5px 5px 0 0;
+          }
         }
       `}</style>
     </div>

@@ -38,18 +38,33 @@ const Index = ({ emojis }: IndexProps) => {
           margin: 0 auto;
           max-width: 600px;
           display: grid;
-          grid-template-columns: 1fr 428px;
+          grid-template-columns: 1fr 420px;
           grid-template-rows: 1fr;
           grid-gap: 10px;
           justify-content: center;
           align-items: center;
-          height: 90vh;
-          --light-blue: #4E6ACD;
+          height: 100vh;
+          --light-blue: #4e6acd;
         }
 
         .keyboard-container {
-          height: 380px;
           width: 100%;
+          height: 360px;
+        }
+
+        @media (max-width: 1000px) {
+          .page {
+            grid-template-rows: 1fr 1fr;
+            grid-template-columns: 1fr;
+            align-items: end;
+            overflow: hidden;
+          }
+        }
+      `}</style>
+      <style jsx global>{`
+        body {
+          margin: 0;
+          padding: 0;
         }
       `}</style>
     </main>
