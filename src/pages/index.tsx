@@ -16,11 +16,14 @@ export type IndexProps = {
   emojis: Emoji[];
 };
 
+const MAX_ERROR = 5;
+
 const Index = ({ emojis }: IndexProps) => {
   /**
-   * @todo Move emoji, maxTimerValue to app store
+   * @todo Move state to app store
    */
   const [emoji, setEmoji] = useState(emojis[getRandomInt(0, emojis.length)]);
+  const [errorCounter, updateErrorCounter] = useState(0);
   const [maxTimerValue, setMaxTimervalue] = useState(10000);
   const [score, setScore] = useState(0);
 
@@ -37,13 +40,19 @@ const Index = ({ emojis }: IndexProps) => {
   /**
    * @todo Move logic to shared
    */
-  const handleOnKeyboardClick = useCallback((selectedEmoji: Emoji) => {
-    if (compareEmoji(selectedEmoji, emoji)) {
-      setScore((value) => value + 1);
-      setMaxTimervalue(value => value - 250);
-    }
-    handleOnTimerEnd();
-  }, [emoji]);
+  const handleOnKeyboardClick = useCallback(
+    (selectedEmoji: Emoji) => {
+      if (compareEmoji(selectedEmoji, emoji)) {
+        setScore((value) => value + 1);
+        setMaxTimervalue((value) => value - 250);
+      }
+      else{
+        updateErrorCounter((value) => value + 1);
+      }
+      handleOnTimerEnd();
+    },
+    [emoji]
+  );
 
   return (
     <>
@@ -56,24 +65,35 @@ const Index = ({ emojis }: IndexProps) => {
       </Head>
       <main className="page">
         <section>
-          <h2>{score}</h2>
-          <EmojiTimer
-            key={emoji.character}
-            maxTimerValue={maxTimerValue}
-            render={emojiTimerRender}
-            onTimerEnd={handleOnTimerEnd}
-          />
+          <h2 className="text">Score {score}</h2>
+          <p className="text">
+            Errors {errorCounter}/{MAX_ERROR}
+          </p>
+          {errorCounter < MAX_ERROR && (
+            <EmojiTimer
+              key={emoji.character}
+              maxTimerValue={maxTimerValue}
+              render={emojiTimerRender}
+              onTimerEnd={handleOnTimerEnd}
+            />
+          )}
+          {errorCounter === MAX_ERROR && <p className="text">You died</p>}
         </section>
         <section>
-          <div className="keyboard-container">
-            <Keyboard
-              emojis={emojis}
-              render={keyboardRender}
-              onClick={handleOnKeyboardClick}
-            />
-          </div>
+          {errorCounter < MAX_ERROR && (
+            <div className="keyboard-container">
+              <Keyboard
+                emojis={emojis}
+                render={keyboardRender}
+                onClick={handleOnKeyboardClick}
+              />
+            </div>
+          )}
         </section>
         <style jsx>{`
+          .text {
+            text-align: center;
+          }
           .page {
             margin: 0 auto;
             max-width: 600px;
