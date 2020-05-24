@@ -26,6 +26,7 @@ const Key = ({ character, slug }: KeyProps) => {
           box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.3);
           font-size: 24px;
           padding: 0;
+          transition: all 0.25s ease;
         }
 
         .key::-moz-focus-inner {
