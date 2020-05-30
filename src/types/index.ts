@@ -6,3 +6,17 @@ export type Emoji = {
     group: string;
     subGroup: string;
 }
+
+export enum DifficultyLevel {
+    EASY = 'Easy',
+    NORMAL = 'Normal',
+    HARD = 'Hard',
+    INSANE = 'Insane'
+}
+
+export type DifficultyLevelSettings = {
+    maxTimer: number;
+    emojiCount: number;
+    shuffled: boolean;
+    maxErrorsCount: number;
+  }
