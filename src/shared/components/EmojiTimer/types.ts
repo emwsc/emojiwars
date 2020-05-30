@@ -1,5 +1,6 @@
 export type EmojiTimerProps = {
     render: Function;
     /** In milliseconds */
-    timerValue: number;
+    maxTimerValue: number;
+    onTimerEnd: (isError: boolean) => void;
 }

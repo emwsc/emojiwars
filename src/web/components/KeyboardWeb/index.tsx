@@ -1,27 +1,28 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 
 import { KEY_HEIGHT, KEY_MARGIN, KEY_WIDTH } from "./constants";
 
 import { KeyboardWebProps, KeyProps } from "./types";
 import { Emoji } from "../../../types";
 
-const Key = ({ character, slug }: KeyProps) => {
+const Key = ({ emoji, onClick }: KeyProps) => {
+  const { character, slug } = emoji;
+
+  const handleOnClick = useCallback(() => onClick(emoji), [emoji, onClick]);
+
   return (
-    <button className="key" tabIndex={1}>
+    <button className="nes-btn key" tabIndex={1} onClick={handleOnClick}>
       <span role="img" aria-label={slug}>
         {character}
       </span>
       <style jsx>{`
         .key {
           flex-shrink: 0;
-          background: #fff;
-          border-radius: 5px;
           display: flex;
           align-items: center;
           justify-content: center;
           height: 100%;
           width: 100%;
-          border: 1px solid transparent;
           outline: none;
           box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.3);
           font-size: 24px;
@@ -31,15 +32,6 @@ const Key = ({ character, slug }: KeyProps) => {
 
         .key::-moz-focus-inner {
           border: 0;
-        }
-
-        .key:focus {
-          border-color: var(--light-blue);
-        }
-
-        .key:active {
-          border-color: var(--light-blue);
-          background: var(--light-blue);
         }
       `}</style>
     </button>
@@ -77,13 +69,13 @@ export const KeyboardWeb = ({ emojis, onClick }: KeyboardWebProps) => {
     setBlocks(breakIntoBlocks(emojis, columns, rows));
   }, []);
   return (
-    <div className="keyboard">
+    <div className="nes-container is-rounded keyboard">
       <div className="keyboard__keys-container" ref={keyboardRef}>
         {blocks.map((block, index) => {
           return (
             <div key={index} className="block">
               {block.map((emoji) => (
-                <Key key={emoji.character} {...emoji} />
+                <Key key={emoji.character} emoji={emoji} onClick={onClick} />
               ))}
             </div>
           );
@@ -96,7 +88,6 @@ export const KeyboardWeb = ({ emojis, onClick }: KeyboardWebProps) => {
           width: 100%;
           height: 100%;
           margin: 0 auto;
-          border-radius: 5px;
           box-sizing: border-box;
         }
 
@@ -122,11 +113,16 @@ export const KeyboardWeb = ({ emojis, onClick }: KeyboardWebProps) => {
           flex-shrink: 0;
         }
 
+        
         @media (max-width: 1000px) {
-          .keyboard {
-            border-radius: 5px 5px 0 0;
+            .keyboard {
+              border-bottom: none;
+              border-left-width: 0!important;
+              border-right-width: 0!important;
+              padding-left: 0!important;
+              padding-right: 0!important;
+            }
           }
-        }
       `}</style>
     </div>
   );
