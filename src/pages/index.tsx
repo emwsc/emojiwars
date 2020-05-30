@@ -54,7 +54,7 @@ const Game = ({ emojis, settings }: GameProps) => {
         updateErrorCount((value) => value + 1);
       }
     },
-    [pickedEmojis]
+    [pickedEmojis, settings]
   );
 
   /**
@@ -70,7 +70,7 @@ const Game = ({ emojis, settings }: GameProps) => {
         handleOnTimerEnd(true);
       }
     },
-    [pickedEmojis]
+    [pickedEmojis, settings, emoji]
   );
 
   return (
